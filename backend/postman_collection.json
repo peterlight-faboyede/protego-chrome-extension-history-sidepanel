@@ -1,0 +1,441 @@
+{
+	"info": {
+		"_postman_id": "history-sidepanel-api",
+		"name": "History Sidepanel API",
+		"description": "Chrome Extension History Sidepanel Backend API Collection\n\nFeatures:\n- Structured JSON responses\n- Rate limiting per IP\n- Security headers (HSTS, XFO, etc.)\n- Database health monitoring\n- Batch operations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"version": "1.0.0"
+	},
+	"item": [
+		{
+			"name": "Root",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Root endpoint - basic API information"
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"body": "{\n  \"success\": true,\n  \"message\": \"API is running\",\n  \"status_code\": 200,\n  \"data\": {\n    \"message\": \"History Sidepanel API\"\n  }\n}"
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"health"
+					]
+				},
+				"description": "Health check endpoint with database connectivity test"
+			},
+			"response": [
+				{
+					"name": "Healthy",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"body": "{\n  \"success\": true,\n  \"message\": \"Service is healthy\",\n  \"status_code\": 200,\n  \"data\": {\n    \"status\": \"healthy\",\n    \"version\": \"1.0.0\",\n    \"uptime_seconds\": 8543.21,\n    \"database\": \"connected\"\n  }\n}"
+				},
+				{
+					"name": "Unhealthy",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"status": "Service Unavailable",
+					"code": 503,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"body": "{\n  \"success\": false,\n  \"message\": \"Service unhealthy\",\n  \"status_code\": 503,\n  \"data\": {\n    \"status\": \"unhealthy\",\n    \"version\": \"1.0.0\",\n    \"uptime_seconds\": 8543.21,\n    \"database\": \"disconnected\"\n  }\n}"
+				}
+			]
+		},
+		{
+			"name": "Visits",
+			"item": [
+				{
+					"name": "Create Visit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"url\": \"https://example.com\",\n  \"title\": \"Example Domain\",\n  \"description\": \"Example website for testing\",\n  \"link_count\": 10,\n  \"word_count\": 500,\n  \"image_count\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"visits"
+							]
+						},
+						"description": "Record a new page visit with metrics\n\nRate Limit: 30/minute per IP"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"url\": \"https://example.com\",\n  \"title\": \"Example Domain\",\n  \"description\": \"Example website\",\n  \"link_count\": 10,\n  \"word_count\": 500,\n  \"image_count\": 5\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/visits",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"visits"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Visit created successfully\",\n  \"status_code\": 201,\n  \"data\": {\n    \"id\": 1,\n    \"url\": \"https://example.com\",\n    \"title\": \"Example Domain\",\n    \"description\": \"Example website\",\n    \"datetime_visited\": \"2025-10-20T10:30:45.123456+00:00\",\n    \"link_count\": 10,\n    \"word_count\": 500,\n    \"image_count\": 5\n  }\n}"
+						},
+						{
+							"name": "Rate Limit Exceeded",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"url\": \"https://example.com\",\n  \"link_count\": 10,\n  \"word_count\": 500,\n  \"image_count\": 5\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/visits",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"visits"
+									]
+								}
+							},
+							"status": "Too Many Requests",
+							"code": 429,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"success\": false,\n  \"message\": \"Too many requests. Please try again later.\",\n  \"status_code\": 429,\n  \"error_codes\": [\"rate_limit_exceeded\"]\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Visits Batch",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"url\": \"https://example.com\",\n    \"title\": \"Example Domain\",\n    \"description\": \"Example website\",\n    \"link_count\": 10,\n    \"word_count\": 500,\n    \"image_count\": 5\n  },\n  {\n    \"url\": \"https://example.org\",\n    \"title\": \"Another Example\",\n    \"description\": \"Another test site\",\n    \"link_count\": 15,\n    \"word_count\": 750,\n    \"image_count\": 8\n  }\n]"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visits/batch",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"visits",
+								"batch"
+							]
+						},
+						"description": "Create multiple visits in a single request (bulk insert)\n\nRate Limit: 10/minute per IP\n\nMore efficient than individual requests for multiple visits."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"url\": \"https://example.com\",\n    \"title\": \"Example\",\n    \"link_count\": 10,\n    \"word_count\": 500,\n    \"image_count\": 5\n  }\n]"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/visits/batch",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"visits",
+										"batch"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Visits created successfully\",\n  \"status_code\": 201,\n  \"data\": {\n    \"created_count\": 2\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Visit History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visits/history?url=https://example.com&page=1&page_size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"visits",
+								"history"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "https://example.com",
+									"description": "Page URL (required)"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number (optional, default: 1)"
+								},
+								{
+									"key": "page_size",
+									"value": "10",
+									"description": "Items per page (optional, default: 10, max: 100)"
+								}
+							]
+						},
+						"description": "Get paginated visit history for a specific URL\n\nRate Limit: 60/minute per IP"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/visits/history?url=https://example.com&page=1&page_size=10",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"visits",
+										"history"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://example.com"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "page_size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"success\": true,\n  \"message\": \"History retrieved successfully\",\n  \"status_code\": 200,\n  \"data\": {\n    \"items\": [\n      {\n        \"id\": 1,\n        \"url\": \"https://example.com\",\n        \"title\": \"Example Domain\",\n        \"description\": \"Example website\",\n        \"datetime_visited\": \"2025-10-20T10:30:45.123456+00:00\",\n        \"link_count\": 10,\n        \"word_count\": 500,\n        \"image_count\": 5\n      }\n    ],\n    \"total\": 25,\n    \"page\": 1,\n    \"page_size\": 10,\n    \"has_more\": true\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Page Metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visits/metrics?url=https://example.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"visits",
+								"metrics"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "https://example.com",
+									"description": "Page URL (required)"
+								}
+							]
+						},
+						"description": "Get aggregated metrics for a specific URL\n\nRate Limit: 60/minute per IP"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/visits/metrics?url=https://example.com",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"visits",
+										"metrics"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://example.com"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Metrics retrieved successfully\",\n  \"status_code\": 200,\n  \"data\": {\n    \"total_visits\": 25\n  }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
