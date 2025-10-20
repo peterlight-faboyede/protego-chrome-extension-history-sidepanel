@@ -18,7 +18,7 @@ A full-stack Chrome Extension that tracks page visits, displays real-time analyt
 
 <div align="center">
   <img src="screenshots/Screenshot - UHCprovider.com - 2.png" alt="Visit History" width="800"/>
-  <p><em>Side panel showing real-time page metrics and visit history for UHCprovider.com - Infite Scroll</em></p>
+  <p><em>Side panel showing real-time page metrics and visit history for UHCprovider.com - Infinite Scroll</em></p>
 </div>
 
 <div align="center">
