@@ -17,7 +17,7 @@ FastAPI backend for Chrome Extension History Sidepanel.
 
 ### Development & Testing
 - **Comprehensive Tests** - Unit and integration test suites (pytest)
-- **Code Coverage** - **94.35% Coverage** with HTML reports
+- **Code Coverage** - **96% Coverage** with HTML reports
 - **Makefile Commands** - Simplified Docker and test operations
 - **Docker Optimization** - Multi-stage builds with .dockerignore
 - **Hot Reload** - Auto-restart on code changes in development
@@ -267,7 +267,7 @@ Service health check with uptime tracking
 }
 ```
 
-### POST /api/visits
+### POST /api/v1/visits
 Create a new page visit record
 
 **Request Body:**
@@ -282,7 +282,24 @@ Create a new page visit record
 }
 ```
 
-### GET /api/visits/history?url={url}&page={page}&page_size={size}
+### POST /api/v1/visits/batch
+Batch create multiple visit records
+
+**Request Body:**
+```json
+[
+  {
+    "url": "https://example.com",
+    "title": "Example Domain",
+    "description": "Example site description",
+    "link_count": 10,
+    "word_count": 500,
+    "image_count": 5
+  }
+]
+```
+
+### GET /api/v1/visits/history?url={url}&page={page}&page_size={size}
 Get paginated visit history for a specific URL
 
 **Query Parameters:**
@@ -304,7 +321,7 @@ Get paginated visit history for a specific URL
 }
 ```
 
-### GET /api/visits/metrics?url={url}
+### GET /api/v1/visits/metrics?url={url}
 Get aggregated metrics for a specific URL
 
 **Response:**
@@ -359,15 +376,15 @@ make clean-all         # Remove containers, volumes, and images
 
 ### Test Coverage
 
-**Current Coverage: 94.35%**
+**Current Coverage: 96%**
 
 The project maintains excellent code coverage with comprehensive test suites:
 
 | Metric | Coverage |
 |--------|----------|
-| **Overall Coverage** | 94.35% |
-| **Statements** | 301 total, 17 missed |
-| **Test Files** | 42 tests passing |
+| **Overall Coverage** | 96% |
+| **Statements** | 375 total, 15 missed |
+| **Test Files** | 59 tests passing |
 
 ### Test Suite Structure
 

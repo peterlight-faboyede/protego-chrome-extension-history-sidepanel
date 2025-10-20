@@ -23,7 +23,7 @@ A Chrome Extension that tracks page visits, displays real-time analytics, and ma
 
 ### Code Quality
 - **TypeScript**: Full type safety across the codebase
-- **Comprehensive Testing**: **94.37% Code Coverage** with unit and integration tests
+- **Comprehensive Testing**: **94.73% Code Coverage** with unit and integration tests
 - **Modular Architecture**: Clean separation of concerns
 - **Error Handling**: Robust error handling with Error Boundaries and interceptors
 
@@ -99,7 +99,7 @@ Edit `.env` with your configuration:
 
 ```env
 # API Configuration
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8000/api/v1
 VITE_API_TIMEOUT=10000
 
 # Queue Configuration
@@ -177,16 +177,16 @@ npm run coverage
 
 ### Test Coverage
 
-**Current Coverage: 94.37%**
+**Current Coverage: 94.73%**
 
 The project maintains excellent code coverage with comprehensive unit and integration tests:
 
 | Metric | Coverage |
 |--------|----------|
-| **Statements** | 94.37% |
-| **Branches** | 87.91% |
-| **Functions** | 95.55% |
-| **Lines** | 94.37% |
+| **Statements** | 94.73% |
+| **Branches** | 88.96% |
+| **Functions** | 93.33% |
+| **Lines** | 94.73% |
 
 ### Running Tests
 
@@ -210,22 +210,29 @@ Coverage reports are generated in `coverage/` directory.
 
 ```
 src/tests/
-├── setup.ts                    # Test configuration and mocks
+├── setup.ts                           # Test configuration and mocks
 ├── mocks/
-│   └── chromeMock.ts          # Chrome API mocks
+│   └── chromeMock.ts                 # Chrome API mocks
 ├── unit/
-│   ├── config.test.ts         # Environment config tests
-│   ├── client.test.ts         # API client tests
-│   ├── useStore.test.ts       # State management tests
-│   ├── rateLimiter.test.ts    # Rate limiter tests
-│   ├── visitQueue.test.ts     # Queue system tests
-│   ├── contentScript.test.ts  # Content script tests
-│   ├── Header.test.tsx        # Component tests
+│   ├── config.test.ts                # Environment config tests
+│   ├── client.test.ts                # API client tests
+│   ├── useStore.test.ts              # State management tests
+│   ├── rateLimiter.test.ts           # Rate limiter tests
+│   ├── visitQueue.test.ts            # Queue system tests
+│   ├── contentScript.test.ts         # Content script tests
+│   ├── BackoffCalculator.test.ts     # Backoff strategy tests
+│   ├── MetricsRetriever.test.ts      # Metrics retrieval tests
+│   ├── SyncManager.test.ts           # Queue sync manager tests
+│   ├── MessageHandler.test.ts        # Message handler tests
+│   ├── TabEventHandler.test.ts       # Tab event handler tests
+│   ├── Header.test.tsx               # Component tests
 │   ├── PageInfo.test.tsx
 │   ├── MetricsCard.test.tsx
-│   └── HistoryList.test.tsx
+│   ├── HistoryList.test.tsx
+│   └── ErrorBoundary.test.tsx
 └── integration/
-    └── App.test.tsx           # Integration tests
+    ├── App.test.tsx                  # App integration tests
+    └── background.integration.test.ts # Background service integration tests
 ```
 
 ---
@@ -236,7 +243,7 @@ src/tests/
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `VITE_API_BASE_URL` | Backend API base URL | `http://localhost:8000/api` | Yes |
+| `VITE_API_BASE_URL` | Backend API base URL | `http://localhost:8000/api/v1` | Yes |
 | `VITE_API_TIMEOUT` | API request timeout (ms) | `10000` | No |
 | `VITE_QUEUE_SYNC_INTERVAL` | Queue sync interval (ms) | `10000` | No |
 | `VITE_VISIT_RATE_LIMIT` | Visit rate limit per URL (ms) | `30000` | No |
@@ -247,7 +254,7 @@ Create `.env` file:
 
 ```env
 # Backend API Configuration
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8000/api/v1
 VITE_API_TIMEOUT=10000
 
 # Feature Flags
@@ -274,6 +281,13 @@ frontend/
 ├── src/
 │   ├── api/
 │   │   └── client.ts              # Axios client with interceptors
+│   ├── background/
+│   │   ├── index.ts               # Background service entry point
+│   │   ├── BackoffCalculator.ts  # Exponential backoff strategy
+│   │   ├── MetricsRetriever.ts   # Metrics retrieval with retries
+│   │   ├── SyncManager.ts         # Queue sync manager
+│   │   ├── MessageHandler.ts     # Chrome message handler
+│   │   └── TabEventHandler.ts    # Chrome tab event handler
 │   ├── config/
 │   │   └── env.ts                 # Environment configuration
 │   ├── store/
@@ -288,17 +302,17 @@ frontend/
 │   │   │   ├── Header.tsx
 │   │   │   ├── PageInfo.tsx
 │   │   │   ├── MetricsCard.tsx
-│   │   │   └── HistoryList.tsx
+│   │   │   ├── HistoryList.tsx
+│   │   │   └── ErrorBoundary.tsx
 │   │   └── styles/
 │   │       ├── index.scss
 │   │       └── App.scss
 │   ├── tests/
 │   │   ├── setup.ts               # Test configuration
 │   │   ├── mocks/                 # Test mocks
-│   │   ├── unit/                  # Unit tests
-│   │   └── integration/           # Integration tests
-│   ├── contentScript.ts           # Page metrics collection
-│   └── background.ts              # Extension background service
+│   │   ├── unit/                  # Unit tests (16 files)
+│   │   └── integration/           # Integration tests (2 files)
+│   └── contentScript.ts           # Page metrics collection
 ├── public/
 ├── dist/                          # Build output (gitignored)
 ├── coverage/                      # Test coverage reports (gitignored)
@@ -364,10 +378,10 @@ The extension communicates with the FastAPI backend:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/visits/batch` | Batch create visit records |
-| `GET` | `/api/visits/history?url={url}&page={page}&page_size={size}` | Get paginated visit history |
-| `GET` | `/api/visits/metrics?url={url}` | Get aggregated metrics for URL |
-| `GET` | `/api/health` | Health check endpoint |
+| `POST` | `/api/v1/visits/batch` | Batch create visit records |
+| `GET` | `/api/v1/visits/history?url={url}&page={page}&page_size={size}` | Get paginated visit history |
+| `GET` | `/api/v1/visits/metrics?url={url}` | Get aggregated metrics for URL |
+| `GET` | `/health` | Health check endpoint |
 
 ### Response Format
 

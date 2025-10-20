@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query, Request
-from sqlalchemy.orm import Session
 from slowapi import Limiter
 from slowapi.util import get_remote_address
+from sqlalchemy.orm import Session
 
-from api.schemas import VisitCreate, VisitResponse, MetricsResponse, PaginatedVisitResponse, BatchCreateResponse
 from api.response import success_response
+from api.schemas import VisitCreate, VisitResponse, PaginatedVisitResponse
 from db.session import get_db
 from repositories.visit_repository import VisitRepository
 from services.visit_service import VisitService

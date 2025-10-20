@@ -1,6 +1,6 @@
 class TestCreateVisit:
     def test_create_visit_success(self, client, sample_visit_data):
-        response = client.post("/api/visits", json=sample_visit_data)
+        response = client.post("/api/v1/visits", json=sample_visit_data)
         
         assert response.status_code == 201
         data = response.json()
@@ -16,7 +16,7 @@ class TestCreateVisit:
             "word_count": 500,
             "image_count": 5
         }
-        response = client.post("/api/visits", json=invalid_data)
+        response = client.post("/api/v1/visits", json=invalid_data)
         
         assert response.status_code == 422
         data = response.json()
@@ -27,7 +27,7 @@ class TestCreateVisit:
         invalid_data = {
             "title": "Test"
         }
-        response = client.post("/api/visits", json=invalid_data)
+        response = client.post("/api/v1/visits", json=invalid_data)
         
         assert response.status_code == 422
         data = response.json()
@@ -40,14 +40,14 @@ class TestCreateVisit:
             "word_count": 500,
             "image_count": 5
         }
-        response = client.post("/api/visits", json=invalid_data)
+        response = client.post("/api/v1/visits", json=invalid_data)
         
         assert response.status_code == 422
 
 
 class TestBatchCreateVisits:
     def test_batch_create_success(self, client, sample_visits_batch):
-        response = client.post("/api/visits/batch", json=sample_visits_batch)
+        response = client.post("/api/v1/visits/batch", json=sample_visits_batch)
         
         assert response.status_code == 201
         data = response.json()
@@ -55,14 +55,14 @@ class TestBatchCreateVisits:
         assert data["data"]["created_count"] == 2
     
     def test_batch_create_empty_list(self, client):
-        response = client.post("/api/visits/batch", json=[])
+        response = client.post("/api/v1/visits/batch", json=[])
         
         assert response.status_code == 201
         data = response.json()
         assert data["data"]["created_count"] == 0
     
     def test_batch_create_single_item(self, client, sample_visit_data):
-        response = client.post("/api/visits/batch", json=[sample_visit_data])
+        response = client.post("/api/v1/visits/batch", json=[sample_visit_data])
         
         assert response.status_code == 201
         data = response.json()
@@ -71,10 +71,10 @@ class TestBatchCreateVisits:
 
 class TestGetVisitHistory:
     def test_get_history_success(self, client, sample_visit_data):
-        client.post("/api/visits", json=sample_visit_data)
-        client.post("/api/visits", json=sample_visit_data)
+        client.post("/api/v1/visits", json=sample_visit_data)
+        client.post("/api/v1/visits", json=sample_visit_data)
         
-        response = client.get(f"/api/visits/history?url={sample_visit_data['url']}")
+        response = client.get(f"/api/v1/visits/history?url={sample_visit_data['url']}")
         
         assert response.status_code == 200
         data = response.json()
@@ -86,13 +86,13 @@ class TestGetVisitHistory:
     
     def test_get_history_pagination(self, client, sample_visit_data):
         for _ in range(15):
-            client.post("/api/visits", json=sample_visit_data)
+            client.post("/api/v1/visits", json=sample_visit_data)
         
         response_page1 = client.get(
-            f"/api/visits/history?url={sample_visit_data['url']}&page=1&page_size=10"
+            f"/api/v1/visits/history?url={sample_visit_data['url']}&page=1&page_size=10"
         )
         response_page2 = client.get(
-            f"/api/visits/history?url={sample_visit_data['url']}&page=2&page_size=10"
+            f"/api/v1/visits/history?url={sample_visit_data['url']}&page=2&page_size=10"
         )
         
         assert response_page1.status_code == 200
@@ -108,12 +108,12 @@ class TestGetVisitHistory:
         assert data_page2["data"]["has_more"] is False
     
     def test_get_history_missing_url(self, client):
-        response = client.get("/api/visits/history")
+        response = client.get("/api/v1/visits/history")
         
         assert response.status_code == 422
     
     def test_get_history_empty_results(self, client):
-        response = client.get("/api/visits/history?url=https://nonexistent.com")
+        response = client.get("/api/v1/visits/history?url=https://nonexistent.com")
         
         assert response.status_code == 200
         data = response.json()
@@ -123,11 +123,11 @@ class TestGetVisitHistory:
 
 class TestGetPageMetrics:
     def test_get_metrics_success(self, client, sample_visit_data):
-        client.post("/api/visits", json=sample_visit_data)
-        client.post("/api/visits", json=sample_visit_data)
-        client.post("/api/visits", json=sample_visit_data)
+        client.post("/api/v1/visits", json=sample_visit_data)
+        client.post("/api/v1/visits", json=sample_visit_data)
+        client.post("/api/v1/visits", json=sample_visit_data)
         
-        response = client.get(f"/api/visits/metrics?url={sample_visit_data['url']}")
+        response = client.get(f"/api/v1/visits/metrics?url={sample_visit_data['url']}")
         
         assert response.status_code == 200
         data = response.json()
@@ -135,14 +135,14 @@ class TestGetPageMetrics:
         assert data["data"]["total_visits"] == 3
     
     def test_get_metrics_no_visits(self, client):
-        response = client.get("/api/visits/metrics?url=https://nonexistent.com")
+        response = client.get("/api/v1/visits/metrics?url=https://nonexistent.com")
         
         assert response.status_code == 200
         data = response.json()
         assert data["data"]["total_visits"] == 0
     
     def test_get_metrics_missing_url(self, client):
-        response = client.get("/api/visits/metrics")
+        response = client.get("/api/v1/visits/metrics")
         
         assert response.status_code == 422
 

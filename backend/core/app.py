@@ -60,5 +60,5 @@ def setup_exception_handlers(app: FastAPI):
 
 def setup_routes(app: FastAPI):
     app.include_router(health.router, tags=["health"])
-    app.include_router(visits.router, prefix="/api/visits", tags=["visits"])
+    app.include_router(visits.router, prefix="/api/v1/visits", tags=["visits"])
 

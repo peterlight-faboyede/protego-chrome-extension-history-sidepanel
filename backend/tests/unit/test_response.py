@@ -45,4 +45,18 @@ class TestResponseHelpers:
         assert body["success"] is False
         assert body["errors"] == ["Field required"]
         assert body["error_codes"] == ["missing"]
+    
+    def test_error_response_with_data(self):
+        response = error_response(
+            message="Service unavailable",
+            status_code=503,
+            data={"status": "unhealthy", "database": "disconnected"}
+        )
+        
+        assert response.status_code == 503
+        body = json.loads(response.body)
+        assert body["success"] is False
+        assert body["message"] == "Service unavailable"
+        assert body["data"]["status"] == "unhealthy"
+        assert body["data"]["database"] == "disconnected"
 

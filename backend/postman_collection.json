@@ -137,16 +137,17 @@
 							"mode": "raw",
 							"raw": "{\n  \"url\": \"https://example.com\",\n  \"title\": \"Example Domain\",\n  \"description\": \"Example website for testing\",\n  \"link_count\": 10,\n  \"word_count\": 500,\n  \"image_count\": 5\n}"
 						},
-						"url": {
-							"raw": "{{base_url}}/api/visits",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"visits"
-							]
-						},
+					"url": {
+						"raw": "{{base_url}}/api/v1/visits",
+						"host": [
+							"{{base_url}}"
+						],
+						"path": [
+							"api",
+							"v1",
+							"visits"
+						]
+					},
 						"description": "Record a new page visit with metrics\n\nRate Limit: 30/minute per IP"
 					},
 					"response": [
@@ -165,12 +166,13 @@
 									"raw": "{\n  \"url\": \"https://example.com\",\n  \"title\": \"Example Domain\",\n  \"description\": \"Example website\",\n  \"link_count\": 10,\n  \"word_count\": 500,\n  \"image_count\": 5\n}"
 								},
 								"url": {
-									"raw": "{{base_url}}/api/visits",
+									"raw": "{{base_url}}/api/v1/visits",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"api",
+										"v1",
 										"visits"
 									]
 								}
@@ -200,12 +202,13 @@
 									"raw": "{\n  \"url\": \"https://example.com\",\n  \"link_count\": 10,\n  \"word_count\": 500,\n  \"image_count\": 5\n}"
 								},
 								"url": {
-									"raw": "{{base_url}}/api/visits",
+									"raw": "{{base_url}}/api/v1/visits",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"api",
+										"v1",
 										"visits"
 									]
 								}
@@ -237,12 +240,13 @@
 							"raw": "[\n  {\n    \"url\": \"https://example.com\",\n    \"title\": \"Example Domain\",\n    \"description\": \"Example website\",\n    \"link_count\": 10,\n    \"word_count\": 500,\n    \"image_count\": 5\n  },\n  {\n    \"url\": \"https://example.org\",\n    \"title\": \"Another Example\",\n    \"description\": \"Another test site\",\n    \"link_count\": 15,\n    \"word_count\": 750,\n    \"image_count\": 8\n  }\n]"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/visits/batch",
+							"raw": "{{base_url}}/api/v1/visits/batch",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"visits",
 								"batch"
 							]
@@ -265,12 +269,13 @@
 									"raw": "[\n  {\n    \"url\": \"https://example.com\",\n    \"title\": \"Example\",\n    \"link_count\": 10,\n    \"word_count\": 500,\n    \"image_count\": 5\n  }\n]"
 								},
 								"url": {
-									"raw": "{{base_url}}/api/visits/batch",
+									"raw": "{{base_url}}/api/v1/visits/batch",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"api",
+										"v1",
 										"visits",
 										"batch"
 									]
@@ -294,12 +299,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/visits/history?url=https://example.com&page=1&page_size=10",
+							"raw": "{{base_url}}/api/v1/visits/history?url=https://example.com&page=1&page_size=10",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"visits",
 								"history"
 							],
@@ -330,12 +336,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/api/visits/history?url=https://example.com&page=1&page_size=10",
+									"raw": "{{base_url}}/api/v1/visits/history?url=https://example.com&page=1&page_size=10",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"api",
+										"v1",
 										"visits",
 										"history"
 									],
@@ -373,12 +380,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/visits/metrics?url=https://example.com",
+							"raw": "{{base_url}}/api/v1/visits/metrics?url=https://example.com",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"visits",
 								"metrics"
 							],
@@ -399,12 +407,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/api/visits/metrics?url=https://example.com",
+									"raw": "{{base_url}}/api/v1/visits/metrics?url=https://example.com",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"api",
+										"v1",
 										"visits",
 										"metrics"
 									],

@@ -3,7 +3,7 @@ import { config } from '../../config/env';
 
 describe('config/env', () => {
   it('should load configuration values from environment', () => {
-    expect(config.apiBaseUrl).toBe('http://localhost:8000/api');
+    expect(config.apiBaseUrl).toBe('http://localhost:8000/api/v1');
     expect(config.apiTimeout).toBe(10000);
     expect(config.queueSyncInterval).toBe(10000);
     expect(config.visitRateLimit).toBe(10000);

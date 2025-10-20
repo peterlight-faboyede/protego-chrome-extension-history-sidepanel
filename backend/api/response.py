@@ -28,11 +28,13 @@ def error_response(
     message: str,
     status_code: int = 400,
     errors: Optional[list[str]] = None,
-    error_codes: Optional[list[str]] = None
+    error_codes: Optional[list[str]] = None,
+    data: Any = None
 ) -> JSONResponse:
     response_data = ApiResponse(
         success=False,
         message=message,
+        data=data,
         errors=errors,
         error_codes=error_codes
     ).model_dump(exclude_none=True)

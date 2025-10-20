@@ -2,8 +2,8 @@
 
 A full-stack Chrome Extension that tracks page visits, displays real-time analytics, and maintains visit history with offline support.
 
-![Coverage](https://img.shields.io/badge/Coverage-Frontend%2094.37%25%20%7C%20Backend%2094.35%25-brightgreen)
-![Tests](https://img.shields.io/badge/Tests-188%20Passing-success)
+![Coverage](https://img.shields.io/badge/Coverage-Frontend%2094.37%25%20%7C%20Backend%2096%25-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-210%20Passing-success)
 
 ---
 
@@ -79,7 +79,7 @@ chrome_extension/
 │   ├── models/          # Database models
 │   ├── services/        # Business logic
 │   ├── repositories/    # Data access layer
-│   ├── tests/           # Test suite (94.35% coverage)
+│   ├── tests/           # Test suite (96% coverage)
 │   └── docker-compose.yml
 │
 ├── frontend/            # React + TypeScript frontend
@@ -105,7 +105,7 @@ chrome_extension/
 - RESTful API with clean 3-layer architecture
 - Database migrations with Alembic
 - Rate limiting & security headers
-- Comprehensive test suite (42 tests)
+- Comprehensive test suite (59 tests)
 - Docker containerization
 - Structured logging
 
@@ -116,7 +116,7 @@ chrome_extension/
 - Exponential backoff on sync failures
 - Rate limiting to prevent duplicates
 - Error boundaries for crash recovery
-- Comprehensive test suite (146 tests)
+- Comprehensive test suite (151 tests)
 
 ---
 
@@ -165,9 +165,9 @@ npm run build
 
 | Component | Coverage | Tests |
 |-----------|----------|-------|
-| **Frontend** | 94.37% | 146 passing |
-| **Backend** | 94.35% | 42 passing |
-| **Total** | **94.36%** | **188 passing** |
+| **Frontend** | 94.37% | 151 passing |
+| **Backend** | 96% | 59 passing |
+| **Total** | **95%** | **210 passing** |
 
 ### Run All Tests
 
@@ -218,7 +218,7 @@ Configure via `backend/docker-compose.yml`:
 ### Frontend Configuration
 Create `frontend/.env`:
 ```env
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8000/api/v1
 VITE_API_TIMEOUT=10000
 VITE_QUEUE_SYNC_INTERVAL=10000
 VITE_VISIT_RATE_LIMIT=30000
@@ -249,10 +249,10 @@ VITE_VISIT_RATE_LIMIT=30000
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/health` | Health check |
-| `POST` | `/api/visits` | Create visit record |
-| `POST` | `/api/visits/batch` | Batch create visits |
-| `GET` | `/api/visits/history` | Get visit history (paginated) |
-| `GET` | `/api/visits/metrics` | Get aggregated metrics |
+| `POST` | `/api/v1/visits` | Create visit record |
+| `POST` | `/api/v1/visits/batch` | Batch create visits |
+| `GET` | `/api/v1/visits/history` | Get visit history (paginated) |
+| `GET` | `/api/v1/visits/metrics` | Get aggregated metrics |
 
 Full API documentation: `http://localhost:8000/docs`
 ---

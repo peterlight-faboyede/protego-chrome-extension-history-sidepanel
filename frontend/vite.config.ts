@@ -18,7 +18,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         sidepanel: resolve(__dirname, 'sidepanel.html'),
-        background: resolve(__dirname, 'src/background.ts'),
+        background: resolve(__dirname, 'src/background/index.ts'),
         contentScript: resolve(__dirname, 'src/contentScript.ts'),
       },
       output: {
@@ -50,7 +50,7 @@ export default defineConfig({
         '**/*.scss',
         'src/vite-env.d.ts',
         'src/sidepanel/main.tsx',
-        'src/background.ts', // Complex file with extensive Chrome API usage
+        'src/background/**', // Complex modules with extensive Chrome API usage
       ],
       thresholds: {
         lines: 90,

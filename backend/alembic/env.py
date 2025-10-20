@@ -1,10 +1,9 @@
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 from alembic import context
-from decouple import config as env_config
 
 from models.visit import Base
+from core.config import settings
 
 config = context.config
 
@@ -13,8 +12,9 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-database_url = env_config("DATABASE_URL", default="postgresql://postgres:postgres@db:5432/history_db")
-config.set_main_option("sqlalchemy.url", database_url)
+config.set_main_option("sqlalchemy.url", settings.database_url)
+config.set_main_option("sqlalchemy.pool_pre_ping", "True")
+config.set_main_option("sqlalchemy.pool_recycle", "3600")
 
 
 def run_migrations_offline() -> None:

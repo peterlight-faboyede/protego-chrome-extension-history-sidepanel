@@ -28,13 +28,10 @@ def health_check():
         logger.error("Database health check failed", extra={"error": str(e)})
         health_status["database"] = "disconnected"
         health_status["status"] = "unhealthy"
-        return JSONResponse(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content=error_response(
-                message="Service unhealthy",
-                status_code=503,
-                data=health_status
-            )
+        return error_response(
+            message="Service unhealthy",
+            status_code=503,
+            data=health_status
         )
     
     return success_response(

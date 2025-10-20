@@ -1,3 +1,7 @@
+from unittest.mock import patch
+from sqlalchemy.exc import OperationalError
+
+
 class TestHealthEndpoints:
     def test_root_endpoint(self, client):
         response = client.get("/")
@@ -31,4 +35,17 @@ class TestHealthEndpoints:
         assert "version" in health_data
         assert "uptime_seconds" in health_data
         assert "database" in health_data
+    
+    def test_health_check_database_failure(self, client):
+        with patch('db.session.engine.connect') as mock_connect:
+            mock_connect.side_effect = OperationalError("Connection failed", None, None)
+            
+            response = client.get("/health")
+            
+            assert response.status_code == 503
+            data = response.json()
+            assert data["success"] is False
+            assert data["message"] == "Service unhealthy"
+            assert data["data"]["status"] == "unhealthy"
+            assert data["data"]["database"] == "disconnected"
 

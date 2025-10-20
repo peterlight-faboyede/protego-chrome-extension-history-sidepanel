@@ -1,4 +1,6 @@
 import pytest
+from unittest.mock import MagicMock, patch
+from sqlalchemy.exc import SQLAlchemyError
 
 from repositories.visit_repository import VisitRepository
 
@@ -83,4 +85,63 @@ class TestVisitRepository:
         
         visits, total = repo.get_visits_by_url("https://example.com", page=1, page_size=10)
         assert total == 1
+    
+    def test_get_visits_by_url_nonexistent(self, db_session):
+        repo = VisitRepository(db_session)
+        visits, total = repo.get_visits_by_url("https://nonexistent.com")
+        assert total == 0
+        assert len(visits) == 0
+    
+    def test_get_latest_visit_by_url_nonexistent(self, db_session):
+        repo = VisitRepository(db_session)
+        latest = repo.get_latest_visit_by_url("https://nonexistent.com")
+        assert latest is None
+    
+    def test_get_metrics_by_url_nonexistent(self, db_session):
+        repo = VisitRepository(db_session)
+        metrics = repo.get_metrics_by_url("https://nonexistent.com")
+        assert metrics["total_visits"] == 0
+    
+    def test_create_visit_error_handling(self, db_session):
+        repo = VisitRepository(db_session)
+        
+        with patch.object(db_session, 'commit', side_effect=SQLAlchemyError("DB Error")):
+            with pytest.raises(SQLAlchemyError):
+                repo.create_visit("https://example.com", "Test", None, 10, 500, 5)
+    
+    def test_get_visits_by_url_error_handling(self, db_session):
+        repo = VisitRepository(db_session)
+        
+        with patch.object(db_session, 'query', side_effect=SQLAlchemyError("DB Error")):
+            with pytest.raises(SQLAlchemyError):
+                repo.get_visits_by_url("https://example.com")
+    
+    def test_get_latest_visit_error_handling(self, db_session):
+        repo = VisitRepository(db_session)
+        
+        with patch.object(db_session, 'query', side_effect=SQLAlchemyError("DB Error")):
+            with pytest.raises(SQLAlchemyError):
+                repo.get_latest_visit_by_url("https://example.com")
+    
+    def test_get_metrics_error_handling(self, db_session):
+        repo = VisitRepository(db_session)
+        
+        with patch.object(db_session, 'query', side_effect=SQLAlchemyError("DB Error")):
+            with pytest.raises(SQLAlchemyError):
+                repo.get_metrics_by_url("https://example.com")
+    
+    def test_bulk_create_visits_error_handling(self, db_session):
+        repo = VisitRepository(db_session)
+        visits_data = [{"url": "https://example.com", "link_count": 10, "word_count": 500, "image_count": 5}]
+        
+        with patch.object(db_session, 'commit', side_effect=SQLAlchemyError("DB Error")):
+            with pytest.raises(SQLAlchemyError):
+                repo.bulk_create_visits(visits_data)
+    
+    def test_get_or_create_url_error_handling(self, db_session):
+        repo = VisitRepository(db_session)
+        
+        with patch.object(db_session, 'query', side_effect=SQLAlchemyError("DB Error")):
+            with pytest.raises(SQLAlchemyError):
+                repo._get_or_create_url("https://example.com")
 
