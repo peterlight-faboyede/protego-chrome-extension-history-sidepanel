@@ -7,6 +7,27 @@ A full-stack Chrome Extension that tracks page visits, displays real-time analyt
 
 ---
 
+## Screenshots
+
+### Extension in Action
+
+<div align="center">
+  <img src="screenshots/Screenshot - UHCprovider.com - 1.png" alt="Side Panel View - Page Metrics" width="800"/>
+  <p><em>Side panel showing real-time page metrics and visit history for UHCprovider.com</em></p>
+</div>
+
+<div align="center">
+  <img src="screenshots/Screenshot - UHCprovider.com - 2.png" alt="Visit History" width="800"/>
+  <p><em>Side panel showing real-time page metrics and visit history for UHCprovider.com - Infite Scroll</em></p>
+</div>
+
+<div align="center">
+  <img src="screenshots/Screenshot - Ustekinumab - Medical Clinical Policy Bulletins | Aetna.png" alt="Analytics View" width="800"/>
+  <p><em>Side panel showing real-time page metrics and visit history for Ustekinumab - Medical Clinical Policy Bulletins | Aetna</em></p>
+</div>
+
+---
+
 ## Quick Start
 
 ### Prerequisites
